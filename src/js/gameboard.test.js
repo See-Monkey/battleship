@@ -42,3 +42,16 @@ describe("Gameboard Test Place Ship", () => {
     expect(gameboard.testPlaceShip(3, [0, 8], 0)).toBe(false);
   });
 });
+
+describe("Receive Attack", () => {
+  test("receive hit", () => {
+    gameboard.placeShip("destroyer", [0, 1], 1);
+    gameboard.receiveAttack([0, 1]);
+    expect(gameboard.ships.destroyer.hits).toBe(1);
+  });
+
+  test("receive miss", () => {
+    gameboard.receiveAttack([7, 7]);
+    expect(gameboard.board[7][7]).toBe("miss");
+  });
+});
