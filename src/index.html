@@ -5,5 +5,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Battleship</title>
   </head>
-  <body></body>
+  <body>
+    <dialog>
+      <form method="dialog" action="">
+        <label for="p1nameInput">Player 1 Name: </label>
+        <input type="text" id="p1nameInput" /><br />
+        <fieldset>
+          <legend>Player 2 Type:</legend>
+          <label for="human">Human</label>
+          <input type="radio" id="human" name="p2type" value="human" /><br />
+
+          <label for="computer">Computer</label>
+          <input
+            type="radio"
+            id="computer"
+            name="p2type"
+            value="computer"
+            checked
+          /><br />
+        </fieldset>
+        <label for="p2nameInput">Player 2 Name: </label>
+        <input type="text" id="p2nameInput" /><br />
+        <button id="startBtn">Start Game</button>
+      </form>
+    </dialog>
+    <header>
+      <h1 class="logo">BATTLESHIP</h1>
+    </header>
+    <div class="content"></div>
+    <footer>
+      <div class="message"></div>
+    </footer>
+  </body>
 </html>
