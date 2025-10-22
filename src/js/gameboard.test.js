@@ -103,6 +103,14 @@ describe("Check If Fleet Sunk", () => {
     expect(gameboard.fleetSunk()).toBe(false);
   });
 
+  test("carrier sunk", () => {
+    expect(gameboard.ships["carrier"].isSunk()).toBe(true);
+  });
+
+  test("return sunk", () => {
+    expect(gameboard.receiveAttack([4, 1])).toBe("sunk");
+  });
+
   test("all sunk", () => {
     gameboard.receiveAttack([4, 1]);
     expect(gameboard.fleetSunk()).toBe(true);
