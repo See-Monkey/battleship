@@ -55,3 +55,56 @@ describe("Receive Attack", () => {
     expect(gameboard.board[7][7]).toBe("miss");
   });
 });
+
+describe("Check If Fleet Sunk", () => {
+  beforeEach(() => {
+    gameboard.placeShip("carrier", [0, 0], 0);
+    gameboard.placeShip("battleship", [1, 0], 0);
+    gameboard.placeShip("cruiser", [2, 0], 0);
+    gameboard.placeShip("submarine", [3, 0], 0);
+    gameboard.placeShip("destroyer", [4, 0], 0);
+
+    const shipPositions = {
+      carrier: [
+        [0, 0],
+        [0, 1],
+        [0, 2],
+        [0, 3],
+        [0, 4],
+      ],
+      battleship: [
+        [1, 0],
+        [1, 1],
+        [1, 2],
+        [1, 3],
+      ],
+      cruiser: [
+        [2, 0],
+        [2, 1],
+        [2, 2],
+      ],
+      submarine: [
+        [3, 0],
+        [3, 1],
+        [3, 2],
+      ],
+      destroyer: [
+        [4, 0],
+        // [4, 1],  intentionally commented to be hit manually in 2nd test
+      ],
+    };
+
+    for (const positions of Object.values(shipPositions)) {
+      positions.forEach((coord) => gameboard.receiveAttack(coord));
+    }
+  });
+
+  test("not all sunk", () => {
+    expect(gameboard.fleetSunk()).toBe(false);
+  });
+
+  test("all sunk", () => {
+    gameboard.receiveAttack([4, 1]);
+    expect(gameboard.fleetSunk()).toBe(true);
+  });
+});

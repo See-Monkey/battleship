@@ -63,12 +63,19 @@ export default class Gameboard {
     const horiz = coordinate[1];
 
     if (this.board[vert][horiz] === undefined) return;
-    else if (this.board[vert][horiz] === null) {
+    else if (this.board[vert][horiz] === "miss") {
+      throw new Error("This spot was already attacked");
+    } else if (this.board[vert][horiz] === null) {
       this.board[vert][horiz] = "miss";
     } else {
       const shipName = this.board[vert][horiz];
       const ship = this.ships[shipName];
       ship.hit();
+      this.board[vert][horiz] = "hit";
     }
+  }
+
+  fleetSunk() {
+    return Object.values(this.ships).every((ship) => ship.isSunk());
   }
 }
