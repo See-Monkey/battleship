@@ -5,7 +5,7 @@ import Gameboard from "./gameboard.js";
 
 export default class Player {
   constructor(name, type) {
-    if (type !== 0 || type !== 1)
+    if (type !== 0 && type !== 1)
       throw new Error("Type needed. 0 = Human, 1 = Computer");
 
     this.name = name;
@@ -15,8 +15,11 @@ export default class Player {
     this.search = 0;
   }
 
+  attack() {
+    return this.search === 1 ? this.searchAndDestroy() : this.randomAttack();
+  }
+
   randomAttack() {
-    if (this.search === 1) return this.searchAndDestroy();
     // if searchAndDestroy active, run that as return
     // generate an array of available coordinates to attack
     // select one at random

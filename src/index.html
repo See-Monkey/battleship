@@ -7,25 +7,29 @@
   </head>
   <body>
     <dialog>
-      <form method="dialog" action="">
-        <label for="p1nameInput">Player 1 Name: </label>
-        <input type="text" id="p1nameInput" /><br />
-        <fieldset>
+      <form method="dialog" action="" class="pregameDialog">
+        <div class="p1nameContainer">
+          <label for="p1nameInput">Player 1 Name: </label>
+          <input type="text" id="p1nameInput" />
+        </div>
+        <fieldset class="p2type">
           <legend>Player 2 Type:</legend>
+          <input type="radio" id="human" name="p2type" value="human" />
           <label for="human">Human</label>
-          <input type="radio" id="human" name="p2type" value="human" /><br />
 
-          <label for="computer">Computer</label>
           <input
             type="radio"
             id="computer"
             name="p2type"
             value="computer"
             checked
-          /><br />
+          />
+          <label for="computer">Computer</label>
         </fieldset>
-        <label for="p2nameInput">Player 2 Name: </label>
-        <input type="text" id="p2nameInput" /><br />
+        <div class="p2nameContainer">
+          <label for="p2nameInput">Player 2 Name: </label>
+          <input type="text" id="p2nameInput" />
+        </div>
         <button id="startBtn">Start Game</button>
       </form>
     </dialog>
@@ -34,7 +38,7 @@
     </header>
     <div class="content"></div>
     <footer>
-      <div class="message"></div>
+      <p class="message">Created by See-Monkey</p>
     </footer>
   </body>
 </html>
