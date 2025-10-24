@@ -120,12 +120,26 @@ export default class Display {
         const target = this.activePlayer.opponent.gameboard.board[i][j];
         console.log(target);
         // if already hit
+        if (this.activePlayer.opponent.gameboard.board[i][j] === "hit") {
+          const hitSquare = this.createElement("div", "square", `${i},${j}`);
+          hitSquare.classList.add("hit");
+          row.appendChild(hitSquare);
+        } else if (
+          // if already missed
+          this.activePlayer.opponent.gameboard.board[i][j] === "miss"
+        ) {
+          const missedSquare = this.createElement("div", "square", `${i},${j}`);
+          missedSquare.classList.add("miss");
+          row.appendChild(missedSquare);
+        } else {
+          // if not attacked yet
+          const square = this.createElement("button", "square", `${i},${j}`);
+          row.appendChild(square);
 
-        // if already missed
-
-        // if not attacked yet
-        const square = this.createElement("button", "square", `${i},${j}`);
-        row.appendChild(square);
+          square.addEventListener("click", (e) => {
+            this.attack([i, j]);
+          });
+        }
       }
     }
 
@@ -154,15 +168,30 @@ export default class Display {
       activeBoard.appendChild(row);
       row.appendChild(label);
       for (let j = 0; j < 10; j++) {
-        // if ship present
-
-        // if attacked and hit
-
-        // if attacked and miss
-
-        // if not attcked yet
-        const square = this.createElement("div", "square", `${i},${j}`);
-        row.appendChild(square);
+        // if already hit
+        if (this.activePlayer.gameboard.board[i][j] === "hit") {
+          const hitSquare = this.createElement("div", "square", `${i},${j}`);
+          hitSquare.classList.add("hit");
+          row.appendChild(hitSquare);
+        } else if (
+          // if already missed
+          this.activePlayer.gameboard.board[i][j] === "miss"
+        ) {
+          const missedSquare = this.createElement("div", "square", `${i},${j}`);
+          missedSquare.classList.add("miss");
+          row.appendChild(missedSquare);
+        } else if (
+          // if not attacked yet
+          this.activePlayer.gameboard.board[i][j] === null
+        ) {
+          const square = this.createElement("div", "square", `${i},${j}`);
+          row.appendChild(square);
+        } else {
+          // named ship present
+          const shipSquare = this.createElement("div", "square", `${i},${j}`);
+          shipSquare.classList.add("ship");
+          row.appendChild(shipSquare);
+        }
       }
     }
 
@@ -171,6 +200,14 @@ export default class Display {
     activeBoard.appendChild(activeName);
 
     content.appendChild(board);
+  }
+
+  attack(coord) {
+    this.activePlayer.opponent.gameboard.receiveAttack(coord);
+    this.activePlayer === this.player1
+      ? (this.activePlayer = this.player2)
+      : (this.activePlayer = this.player1);
+    this.redraw();
   }
 
   message(string) {

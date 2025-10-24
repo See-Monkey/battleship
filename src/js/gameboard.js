@@ -59,6 +59,7 @@ export default class Gameboard {
   }
 
   receiveAttack(coordinate) {
+    console.log(coordinate);
     const vert = coordinate[0];
     const horiz = coordinate[1];
 
