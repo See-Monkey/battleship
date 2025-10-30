@@ -88,6 +88,7 @@ dialog {
 .pregameDialog {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 10px;
 }
 
@@ -108,6 +109,11 @@ input#computer {
 
 #startBtn {
   margin-top: 24px;
+  background-color: var(--d-blue);
+  color: var(--white);
+  font-weight: bold;
+  padding: 4px 16px;
+  border-radius: 10px;
 }
 
 /* ============ header ============ */
@@ -206,6 +212,7 @@ footer {
   display: flex;
   justify-content: center;
   align-items: center;
+  gap: 14px;
   height: 12%;
   background-color: var(--blue);
 }
@@ -214,6 +221,15 @@ footer {
   background-color: var(--gray);
   padding: 20px;
   border-radius: 12px;
+}
+
+#actionBtn {
+  background-color: var(--d-blue);
+  color: var(--white);
+  font-weight: bold;
+  padding: 4px 16px;
+  border-radius: 10px;
+  display: none;
 }
 
 /* ============ mobile ============ */

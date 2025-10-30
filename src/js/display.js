@@ -5,6 +5,9 @@ export default class Display {
     this.player1;
     this.player2;
     this.activePlayer;
+    this.state = null;
+    // state will determine what the action button does
+    // state 1 = placement, 2 = place transition, 3 = player turn, 4 = turn transition, 5 = game over
   }
 
   createElement(tag, className, id) {
@@ -46,6 +49,8 @@ export default class Display {
   }
 
   start() {
+    this.state = 1;
+
     // query the dom
     const p1nameInput = document.querySelector("#p1nameInput");
     const p2typeInput = document.querySelector(
@@ -207,6 +212,8 @@ export default class Display {
     this.activePlayer === this.player1
       ? (this.activePlayer = this.player2)
       : (this.activePlayer = this.player1);
+
+    // future state = pass turn activate, transition or cpu atk
     this.redraw();
   }
 

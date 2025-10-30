@@ -10,6 +10,27 @@ document.addEventListener("click", (e) => {
   if (target.id === "startBtn") {
     display.start();
   }
+  if (target.id === "actionBtn") {
+    switch (display.state) {
+      case null: // pregame
+        break;
+      case 1: // placement
+        display.passTurnShipPlace();
+        break;
+      case 2: // placement transition
+        display.redrawShipPlace();
+        break;
+      case 3: // player turn
+        display.passTurn();
+        break;
+      case 4: // turn transition
+        display.redraw();
+        break;
+      case 5: // game over
+        display.start();
+        break;
+    }
+  }
 });
 
 display.init();
