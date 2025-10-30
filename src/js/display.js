@@ -188,6 +188,23 @@ export default class Display {
     content.appendChild(orientationBtn);
   }
 
+  passTurnShipPlace() {
+    if (this.activePlayer === this.player1) {
+      if (this.player2.type === 0) {
+        this.state = 2;
+
+        // transition screen to allow player 2 to become active and ready up
+      } else {
+        // computer place all ships and move to player 1 attack
+        // this.state = 3;
+      }
+    } else if (this.activePlayer === this.player2) {
+      this.state = 4;
+
+      // transition screen to allow player 1 to become active and ready for attack
+    }
+  }
+
   redraw() {
     const content = document.querySelector(".content");
     content.innerHTML = "";
