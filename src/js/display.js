@@ -71,22 +71,121 @@ export default class Display {
     this.player2.opponent = this.player1;
     this.activePlayer = this.player1;
 
-    // place dummy ships
-    this.player1.gameboard.placeShip("carrier", [0, 0], 0);
-    this.player1.gameboard.placeShip("battleship", [1, 0], 0);
-    this.player1.gameboard.placeShip("cruiser", [2, 0], 0);
-    this.player1.gameboard.placeShip("submarine", [3, 0], 0);
-    this.player1.gameboard.placeShip("destroyer", [4, 0], 1);
+    this.redrawPlaceShip();
+  }
 
-    this.player2.gameboard.placeShip("carrier", [0, 0], 0);
-    this.player2.gameboard.placeShip("battleship", [1, 0], 0);
-    this.player2.gameboard.placeShip("cruiser", [2, 0], 0);
-    this.player2.gameboard.placeShip("submarine", [3, 0], 0);
-    this.player2.gameboard.placeShip("destroyer", [4, 0], 1);
-    // future state: enter ship placement mode
+  redrawPlaceShip() {
+    const content = document.querySelector(".content");
+    content.innerHTML = "";
 
-    // redraw and await input
-    this.redraw();
+    const board = this.createElement("div", "board");
+
+    const opponentBoard = this.createElement("div", "opponentBoard");
+    const activeBoard = this.createElement("div", "activeBoard");
+    board.appendChild(opponentBoard);
+    board.appendChild(activeBoard);
+
+    // draw opponent board
+    const row = this.createElement("div", "row");
+    const emptyLabel = this.createElement("div", "label");
+    opponentBoard.appendChild(row);
+    row.appendChild(emptyLabel);
+
+    for (let i = 0; i < 10; i++) {
+      const label = this.createElement("div", "label");
+      label.textContent = i + 1;
+      row.appendChild(label);
+    }
+
+    let char;
+    char = "A";
+    for (let i = 0; i < 10; i++) {
+      const row = this.createElement("div", "row");
+      const label = this.createElement("div", "label");
+      label.textContent = char;
+      char = this.nextChar(char);
+      opponentBoard.appendChild(row);
+      row.appendChild(label);
+      for (let j = 0; j < 10; j++) {
+        const square = this.createElement("div", "square", `${i},${j}`);
+        row.appendChild(square);
+      }
+    }
+
+    const opponentName = this.createElement("div", "name");
+    opponentName.textContent = this.activePlayer.opponent.name;
+    opponentBoard.appendChild(opponentName);
+
+    // draw active player board
+    const activeRow = this.createElement("div", "row");
+    const activeEmptyLabel = this.createElement("div", "label");
+    activeBoard.appendChild(activeRow);
+    activeRow.appendChild(activeEmptyLabel);
+
+    for (let i = 0; i < 10; i++) {
+      const label = this.createElement("div", "label");
+      label.textContent = i + 1;
+      activeRow.appendChild(label);
+    }
+
+    char = "A";
+    for (let i = 0; i < 10; i++) {
+      const row = this.createElement("div", "row");
+      const label = this.createElement("div", "label");
+      label.textContent = char;
+      char = this.nextChar(char);
+      activeBoard.appendChild(row);
+      row.appendChild(label);
+      for (let j = 0; j < 10; j++) {
+        // if null
+        if (this.activePlayer.gameboard.board[i][j] === null) {
+          // create button with placeShip event listener
+          const square = this.createElement(
+            this.activePlayer.gameboard.activeShip !== "done"
+              ? "button"
+              : "div",
+            "square",
+            `${i},${j}`,
+          );
+          row.appendChild(square);
+
+          if (this.activePlayer.gameboard.activeShip !== "done") {
+            square.addEventListener("click", (e) => {
+              this.activePlayer.gameboard.placeShip(
+                this.activePlayer.gameboard.activeShip,
+                [i, j],
+                this.activePlayer.gameboard.activeOrientation,
+              );
+              this.redrawPlaceShip();
+            });
+          }
+        } else {
+          // named ship present
+          const shipSquare = this.createElement("div", "square", `${i},${j}`);
+          shipSquare.classList.add("ship");
+          row.appendChild(shipSquare);
+        }
+      }
+    }
+
+    const activeName = this.createElement("div", "name");
+    activeName.textContent = this.activePlayer.name;
+    activeBoard.appendChild(activeName);
+
+    const orientationBtn = document.createElement("button");
+    orientationBtn.id = "orientationBtn";
+    this.activePlayer.gameboard.activeOrientation === 0
+      ? orientationBtn.classList.add("horiz")
+      : orientationBtn.classList.add("vert");
+    if (this.activePlayer.gameboard.activeShip === "done") {
+      orientationBtn.classList.add("hidden");
+      const actionBtn = document.querySelector("#actionBtn");
+      actionBtn.textContent = "Done";
+      actionBtn.style.display = "block";
+    }
+
+    content.appendChild(board);
+    content.appendChild(orientationBtn);
   }
 
   redraw() {
@@ -122,8 +221,6 @@ export default class Display {
       opponentBoard.appendChild(row);
       row.appendChild(label);
       for (let j = 0; j < 10; j++) {
-        const target = this.activePlayer.opponent.gameboard.board[i][j];
-        console.log(target);
         // if already hit
         if (this.activePlayer.opponent.gameboard.board[i][j] === "hit") {
           const hitSquare = this.createElement("div", "square", `${i},${j}`);

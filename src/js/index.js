@@ -31,6 +31,10 @@ document.addEventListener("click", (e) => {
         break;
     }
   }
+  if (target.id === "orientationBtn") {
+    display.activePlayer.gameboard.toggleOrientation();
+    display.redrawPlaceShip();
+  }
 });
 
 display.init();

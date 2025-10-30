@@ -23,6 +23,9 @@ export default class Gameboard {
       submarine: new Ship("submarine"),
       destroyer: new Ship("destroyer"),
     };
+
+    this.activeShip = "carrier";
+    this.activeOrientation = 0;
   }
 
   placeShip(shipName, shipOrigin, shipOrientation) {
@@ -39,6 +42,7 @@ export default class Gameboard {
       this.board[vert][horiz] = shipName;
       shipOrientation === 0 ? horiz++ : vert++;
     }
+    this.nextShip();
   }
 
   testPlaceShip(shipLength, shipOrigin, shipOrientation) {
@@ -56,6 +60,31 @@ export default class Gameboard {
       shipOrientation === 0 ? horiz++ : vert++;
     }
     return true;
+  }
+
+  nextShip() {
+    switch (this.activeShip) {
+      case "carrier":
+        this.activeShip = "battleship";
+        break;
+      case "battleship":
+        this.activeShip = "cruiser";
+        break;
+      case "cruiser":
+        this.activeShip = "submarine";
+        break;
+      case "submarine":
+        this.activeShip = "destroyer";
+        break;
+      case "destroyer":
+        this.activeShip = "done";
+    }
+  }
+
+  toggleOrientation() {
+    this.activeOrientation === 0
+      ? (this.activeOrientation = 1)
+      : (this.activeOrientation = 0);
   }
 
   receiveAttack(coordinate) {

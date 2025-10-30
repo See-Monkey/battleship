@@ -132,10 +132,12 @@ header {
 /* ============ content ============ */
 .content {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   background-color: var(--white);
   flex: 1;
+  gap: 20px;
 }
 
 .board {
@@ -205,6 +207,25 @@ header {
   background-repeat: no-repeat;
   background-size: 24px 24px;
   background-image: url("../img/convergence-target.svg");
+}
+
+#orientationBtn {
+  height: 50px;
+  width: 50px;
+  border-radius: 8px;
+  background-color: var(--blue);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 34px 34px;
+}
+#orientationBtn.horiz {
+  background-image: url("../img/phone-rotate-portrait.svg");
+}
+#orientationBtn.vert {
+  background-image: url("../img/phone-rotate-landscape.svg");
+}
+#orientationBtn.hidden {
+  display: none;
 }
 
 /* ============ footer ============ */
