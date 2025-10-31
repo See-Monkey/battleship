@@ -13,6 +13,8 @@ export default class Player {
     this.type = type;
     this.opponent = null;
     this.search = 0;
+    this.previousResult = null;
+    this.previousShip = null;
   }
 
   attack() {

@@ -7,11 +7,11 @@
 export default class Ship {
   constructor(name) {
     const allowedNames = [
-      "carrier",
-      "battleship",
-      "cruiser",
-      "submarine",
-      "destroyer",
+      "Carrier",
+      "Battleship",
+      "Cruiser",
+      "Submarine",
+      "Destroyer",
     ];
     if (!allowedNames.includes(name)) {
       throw new Error("Invalid ship name");
@@ -19,19 +19,19 @@ export default class Ship {
     this.name = name;
 
     switch (name) {
-      case "carrier":
+      case "Carrier":
         this.length = 5;
         break;
-      case "battleship":
+      case "Battleship":
         this.length = 4;
         break;
-      case "cruiser":
+      case "Cruiser":
         this.length = 3;
         break;
-      case "submarine":
+      case "Submarine":
         this.length = 3;
         break;
-      case "destroyer":
+      case "Destroyer":
         this.length = 2;
         break;
     }

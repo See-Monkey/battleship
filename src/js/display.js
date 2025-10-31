@@ -258,7 +258,15 @@ export default class Display {
 
     content.innerHTML = "";
     message.style.display = "block";
-    message.textContent = `${this.activePlayer.name}, you may attack when ready.`;
+    if (this.activePlayer.opponent.previousResult === "miss") {
+      message.textContent = `${this.activePlayer.opponent.name} missed.`;
+    } else if (this.activePlayer.opponent.previousResult === "hit") {
+      message.textContent = `${this.activePlayer.opponent.name} hit your ${this.activePlayer.opponent.previousShip}.`;
+    } else if (this.activePlayer.opponent.previousResult === "sunk") {
+      message.textContent = `${this.activePlayer.opponent.name} sunk your ${this.activePlayer.opponent.previousShip}.`;
+    }
+    message.appendChild(document.createElement("br"));
+    message.append(`${this.activePlayer.name}, you may attack when ready.`);
     actionBtn.style.display = "none";
 
     const board = this.createElement("div", "board");
@@ -373,15 +381,30 @@ export default class Display {
     content.appendChild(board);
   }
 
-  attack(coord) {
-    const result = this.activePlayer.opponent.gameboard.receiveAttack(coord);
+  attack(coordinate) {
+    const vert = coordinate[0];
+    const horiz = coordinate[1];
+    const hitShip = this.activePlayer.opponent.gameboard.board[vert][horiz];
+    const result =
+      this.activePlayer.opponent.gameboard.receiveAttack(coordinate);
 
     this.redraw();
     const message = document.querySelector(".message");
     const actionBtn = document.querySelector("#actionBtn");
 
     if (this.activePlayer.opponent.gameboard.fleetSunk() !== true) {
-      message.textContent = `${result}!`;
+      if (result === "miss") {
+        message.textContent = "You missed.";
+        this.activePlayer.previousResult = "miss";
+      } else if (result === "hit") {
+        message.textContent = "You hit something!";
+        this.activePlayer.previousResult = "hit";
+        this.activePlayer.previousShip = hitShip;
+      } else if (result === "sunk") {
+        message.textContent = `You sunk ${this.activePlayer.opponent.name}'s ${hitShip}!`;
+        this.activePlayer.previousResult = "sunk";
+        this.activePlayer.previousShip = hitShip;
+      }
       actionBtn.textContent = "Pass Turn";
       actionBtn.style.display = "block";
     } else {

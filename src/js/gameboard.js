@@ -17,14 +17,14 @@ export default class Gameboard {
     }
 
     this.ships = {
-      carrier: new Ship("carrier"),
-      battleship: new Ship("battleship"),
-      cruiser: new Ship("cruiser"),
-      submarine: new Ship("submarine"),
-      destroyer: new Ship("destroyer"),
+      Carrier: new Ship("Carrier"),
+      Battleship: new Ship("Battleship"),
+      Cruiser: new Ship("Cruiser"),
+      Submarine: new Ship("Submarine"),
+      Destroyer: new Ship("Destroyer"),
     };
 
-    this.activeShip = "carrier";
+    this.activeShip = "Carrier";
     this.activeOrientation = 0;
   }
 
@@ -64,19 +64,19 @@ export default class Gameboard {
 
   nextShip() {
     switch (this.activeShip) {
-      case "carrier":
-        this.activeShip = "battleship";
+      case "Carrier":
+        this.activeShip = "Battleship";
         break;
-      case "battleship":
-        this.activeShip = "cruiser";
+      case "Battleship":
+        this.activeShip = "Cruiser";
         break;
-      case "cruiser":
-        this.activeShip = "submarine";
+      case "Cruiser":
+        this.activeShip = "Submarine";
         break;
-      case "submarine":
-        this.activeShip = "destroyer";
+      case "Submarine":
+        this.activeShip = "Destroyer";
         break;
-      case "destroyer":
+      case "Destroyer":
         this.activeShip = "done";
     }
   }
@@ -88,7 +88,6 @@ export default class Gameboard {
   }
 
   receiveAttack(coordinate) {
-    console.log(coordinate);
     const vert = coordinate[0];
     const horiz = coordinate[1];
 

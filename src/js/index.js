@@ -11,7 +11,6 @@ document.addEventListener("click", (e) => {
     display.start();
   }
   if (target.id === "actionBtn") {
-    console.log(display.state);
     switch (display.state) {
       case null: // pregame
         break;
