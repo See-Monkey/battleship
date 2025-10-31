@@ -75,8 +75,20 @@ export default class Display {
   }
 
   redrawPlaceShip() {
+    if (this.activePlayer === this.player2) this.state = 3;
+
     const content = document.querySelector(".content");
+    const message = document.querySelector(".message");
+    const actionBtn = document.querySelector("#actionBtn");
+
     content.innerHTML = "";
+    message.style.display = "block";
+    if (this.activePlayer.gameboard.activeShip !== "done") {
+      message.textContent = `${this.activePlayer.name}, place your ${this.activePlayer.gameboard.activeShip}.`;
+    } else {
+      message.textContent = "All ships placed.";
+    }
+    actionBtn.style.display = "none";
 
     const board = this.createElement("div", "board");
 
@@ -179,7 +191,6 @@ export default class Display {
       : orientationBtn.classList.add("vert");
     if (this.activePlayer.gameboard.activeShip === "done") {
       orientationBtn.classList.add("hidden");
-      const actionBtn = document.querySelector("#actionBtn");
       actionBtn.textContent = "Done";
       actionBtn.style.display = "block";
     }
@@ -188,12 +199,13 @@ export default class Display {
     content.appendChild(orientationBtn);
   }
 
-  passTurnShipPlace() {
+  passTurnPlaceShip() {
     if (this.activePlayer === this.player1) {
       if (this.player2.type === 0) {
         this.state = 2;
 
         // transition screen to allow player 2 to become active and ready up
+        this.transition();
       } else {
         // computer place all ships and move to player 1 attack
         // this.state = 3;
@@ -202,12 +214,52 @@ export default class Display {
       this.state = 4;
 
       // transition screen to allow player 1 to become active and ready for attack
+      this.transition();
     }
   }
 
-  redraw() {
+  passTurn() {
+    if (this.player2.type === 0) {
+      this.state = 4;
+      this.transition();
+    } else {
+      // computer attack and display result
+    }
+  }
+
+  transition() {
     const content = document.querySelector(".content");
+    const message = document.querySelector(".message");
+    const actionBtn = document.querySelector("#actionBtn");
+
     content.innerHTML = "";
+    message.style.display = "none";
+    actionBtn.textContent = "Ready";
+
+    const transitionMsg = this.createElement("div", "transition");
+
+    if (this.state === 2) {
+      this.activePlayer = this.activePlayer.opponent;
+      transitionMsg.textContent = `Pass the device to ${this.activePlayer.name} so they can place their ships.`;
+    }
+    if (this.state === 4) {
+      this.activePlayer = this.activePlayer.opponent;
+      transitionMsg.textContent = `Pass the device to ${this.activePlayer.name}.`;
+    }
+
+    content.appendChild(transitionMsg);
+  }
+
+  redraw() {
+    this.state = 3;
+    const content = document.querySelector(".content");
+    const message = document.querySelector(".message");
+    const actionBtn = document.querySelector("#actionBtn");
+
+    content.innerHTML = "";
+    message.style.display = "block";
+    message.textContent = `${this.activePlayer.name}, you may attack when ready.`;
+    actionBtn.style.display = "none";
 
     const board = this.createElement("div", "board");
 
@@ -322,13 +374,23 @@ export default class Display {
   }
 
   attack(coord) {
-    this.activePlayer.opponent.gameboard.receiveAttack(coord);
-    this.activePlayer === this.player1
-      ? (this.activePlayer = this.player2)
-      : (this.activePlayer = this.player1);
+    const result = this.activePlayer.opponent.gameboard.receiveAttack(coord);
 
-    // future state = pass turn activate, transition or cpu atk
     this.redraw();
+    const message = document.querySelector(".message");
+    const actionBtn = document.querySelector("#actionBtn");
+
+    if (this.activePlayer.opponent.gameboard.fleetSunk() !== true) {
+      message.textContent = `${result}!`;
+      actionBtn.textContent = "Pass Turn";
+      actionBtn.style.display = "block";
+    } else {
+      // game over
+      this.state = 5;
+      message.textContent = "You won!";
+      actionBtn.textContent = "New Game";
+      actionBtn.style.display = "block";
+    }
   }
 
   message(string) {

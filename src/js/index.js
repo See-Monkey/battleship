@@ -11,14 +11,15 @@ document.addEventListener("click", (e) => {
     display.start();
   }
   if (target.id === "actionBtn") {
+    console.log(display.state);
     switch (display.state) {
       case null: // pregame
         break;
       case 1: // placement
-        display.passTurnShipPlace();
+        display.passTurnPlaceShip();
         break;
       case 2: // placement transition
-        display.redrawShipPlace();
+        display.redrawPlaceShip();
         break;
       case 3: // player turn
         display.passTurn();

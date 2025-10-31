@@ -1,6 +1,5 @@
-make transition screen - custom based on state
-make p2 placement completion trigger p1 attack phase
-make a pass turn function (different for human vs cpu P2)
+style the hit, miss, sunk messages
+add message to know what opponent just did recently on redraw
 make random placement function for computer ships
 make the computer attack on its turn
 make the computer search and destroy
