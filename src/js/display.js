@@ -244,6 +244,7 @@ export default class Display {
     }
     if (this.state === 4) {
       this.activePlayer = this.activePlayer.opponent;
+      this.activePlayer.activeAttack = true;
       transitionMsg.textContent = `Pass the device to ${this.activePlayer.name}.`;
     }
 
@@ -312,12 +313,18 @@ export default class Display {
           row.appendChild(missedSquare);
         } else {
           // if not attacked yet
-          const square = this.createElement("button", "square", `${i},${j}`);
+          const square = this.createElement(
+            this.activePlayer.activeAttack === true ? "button" : "div",
+            "square",
+            `${i},${j}`,
+          );
           row.appendChild(square);
 
-          square.addEventListener("click", (e) => {
-            this.attack([i, j]);
-          });
+          if (this.activePlayer.activeAttack === true) {
+            square.addEventListener("click", (e) => {
+              this.attack([i, j]);
+            });
+          }
         }
       }
     }
@@ -387,6 +394,7 @@ export default class Display {
     const hitShip = this.activePlayer.opponent.gameboard.board[vert][horiz];
     const result =
       this.activePlayer.opponent.gameboard.receiveAttack(coordinate);
+    this.activePlayer.activeAttack = false;
 
     this.redraw();
     const message = document.querySelector(".message");

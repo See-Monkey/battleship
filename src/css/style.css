@@ -239,6 +239,7 @@ footer {
 }
 
 .message {
+  text-align: center;
   background-color: var(--gray);
   padding: 20px;
   border-radius: 12px;
