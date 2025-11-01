@@ -16,6 +16,7 @@ export default class Player {
     this.activeAttack = false;
     this.previousResult = null;
     this.previousShip = null;
+    this.attackedCoordinates = new Set();
   }
 
   placeShips() {
@@ -46,11 +47,28 @@ export default class Player {
   }
 
   randomAttack() {
-    // if searchAndDestroy active, run that as return
-    // generate an array of available coordinates to attack
-    // select one at random
-    // attack
-    // if hit, store the coord and activate searchAndDestroy
+    let vert, horiz, coordinate;
+    do {
+      vert = Math.floor(Math.random() * 10);
+      horiz = Math.floor(Math.random() * 10);
+      coordinate = `${vert},${horiz}`;
+    } while (this.attackedCoordinates.has(coordinate));
+
+    const hitShip = this.opponent.gameboard.board[vert][horiz];
+    this.attackedCoordinates.add(coordinate);
+    const result = this.opponent.gameboard.receiveAttack([vert, horiz]);
+
+    if (result === "hit") {
+      // this.search = 1;
+      this.previousResult = "hit";
+      this.previousShip = hitShip;
+    } else if (result === "sunk") {
+      this.search = 0;
+      this.previousResult = "sunk";
+      this.previousShip = hitShip;
+    } else if (result === "miss") {
+      this.previousResult = "miss";
+    }
   }
 
   searchAndDestroy() {

@@ -226,6 +226,22 @@ export default class Display {
       this.transition();
     } else {
       // computer attack and display result
+      this.activePlayer.opponent.attack();
+
+      if (this.activePlayer.gameboard.fleetSunk() === true) {
+        // game over
+        const message = document.querySelector(".message");
+        const actionBtn = document.querySelector("#actionBtn");
+
+        this.state = 5;
+        this.redraw();
+        message.textContent = `${this.activePlayer.opponent.name} won.`;
+        actionBtn.textContent = "New Game";
+        actionBtn.style.display = "block";
+      }
+
+      this.activePlayer.activeAttack = true;
+      this.redraw();
     }
   }
 
