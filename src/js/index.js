@@ -30,7 +30,6 @@ function handleAction(e) {
   }
 
   if (target.id === "actionBtn") {
-    console.log(display.state);
     switch (display.state) {
       case null: // pregame
         break;

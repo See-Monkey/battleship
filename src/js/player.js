@@ -13,6 +13,8 @@ export default class Player {
     this.type = type;
     this.opponent = null;
     this.search = 0;
+    this.searchCoordinate = null;
+    this.searchDirection = null;
     this.activeAttack = false;
     this.previousResult = null;
     this.previousShip = null;
@@ -47,19 +49,19 @@ export default class Player {
   }
 
   randomAttack() {
-    let vert, horiz, coordinate;
+    let vert, horiz;
     do {
       vert = Math.floor(Math.random() * 10);
       horiz = Math.floor(Math.random() * 10);
-      coordinate = `${vert},${horiz}`;
-    } while (this.attackedCoordinates.has(coordinate));
+      this.searchCoordinate = `${vert},${horiz}`;
+    } while (this.attackedCoordinates.has(this.searchCoordinate));
 
     const hitShip = this.opponent.gameboard.board[vert][horiz];
-    this.attackedCoordinates.add(coordinate);
+    this.attackedCoordinates.add(this.searchCoordinate);
     const result = this.opponent.gameboard.receiveAttack([vert, horiz]);
 
     if (result === "hit") {
-      // this.search = 1;
+      this.search = 1;
       this.previousResult = "hit";
       this.previousShip = hitShip;
     } else if (result === "sunk") {
@@ -72,8 +74,90 @@ export default class Player {
   }
 
   searchAndDestroy() {
-    // from stored coord, go east until miss or invalid target
-    // repeat for south, west, north
-    // end mode when ship sunk
+    if (!this.searchCoordinate) return this.randomAttack();
+
+    let [originVert, originHoriz] = this.searchCoordinate
+      .split(",")
+      .map(Number);
+    let vert = originVert;
+    let horiz = originHoriz;
+    let coordinate = null;
+
+    // randomly choose east or south for search direction
+    if (this.searchDirection === null) {
+      const randomDirection = Math.floor(Math.random() * 2);
+      if (randomDirection === 0) this.searchDirection = [0, 1]; // east
+      if (randomDirection === 1) this.searchDirection = [1, 0]; // south
+    }
+
+    while (this.search === 1) {
+      do {
+        // search in the searchDirection until an unattacked square is identified
+        vert += this.searchDirection[0];
+        horiz += this.searchDirection[1];
+        coordinate = `${vert},${horiz}`;
+
+        // check if identified square is out of bounds
+        if (vert < 0 || vert > 9 || horiz < 0 || horiz > 9) {
+          this.nextDirection();
+          vert = originVert;
+          horiz = originHoriz;
+          continue;
+        }
+
+        // if previous miss identified, switch direction early
+        if (this.attackedCoordinates.has(coordinate)) {
+          const square = this.opponent.gameboard.board[vert][horiz];
+          if (square === "miss") {
+            this.nextDirection();
+            vert = originVert;
+            horiz = originHoriz;
+            continue;
+          }
+        }
+      } while (this.attackedCoordinates.has(coordinate));
+
+      // valid square found; attack
+      const hitShip = this.opponent.gameboard.board[vert][horiz];
+      this.attackedCoordinates.add(coordinate);
+      const result = this.opponent.gameboard.receiveAttack([vert, horiz]);
+
+      if (result === "hit") {
+        this.previousResult = "hit";
+        this.previousShip = hitShip;
+        return;
+      } else if (result === "sunk") {
+        this.previousResult = "sunk";
+        this.previousShip = hitShip;
+        this.search = 0;
+        this.searchDirection = null;
+        this.searchCoordinate = null;
+        return;
+      } else if (result === "miss") {
+        this.previousResult = "miss";
+        this.nextDirection();
+        return;
+      }
+    }
+
+    // all directions invalid or exhausted
+    this.search = 0;
+    this.searchDirection = null;
+    this.searchCoordinate = null;
+    return this.randomAttack();
+  }
+
+  nextDirection() {
+    const [vert, horiz] = this.searchDirection;
+
+    if (vert === 0 && horiz === 1) {
+      this.searchDirection = [0, -1]; // west
+    } else if (vert === 0 && horiz === -1) {
+      this.searchDirection = [1, 0]; // south
+    } else if (vert === 1 && horiz === 0) {
+      this.searchDirection = [-1, 0]; // north
+    } else if (vert === -1 && horiz === 0) {
+      this.searchDirection = [0, 1]; // wrap back around to east
+    }
   }
 }
