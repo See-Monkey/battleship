@@ -65,7 +65,7 @@ export default class Display {
       p2type === 0 ? p2nameInput.value || "Player 2" : "See-Monkey";
 
     // initialize players
-    this.player1 = new Player(p1name, 1);
+    this.player1 = new Player(p1name, 0);
     this.player2 = new Player(p2name, p2type);
     this.player1.opponent = this.player2;
     this.player2.opponent = this.player1;
@@ -233,11 +233,12 @@ export default class Display {
         const message = document.querySelector(".message");
         const actionBtn = document.querySelector("#actionBtn");
 
-        this.state = 5;
         this.redraw();
+        this.state = 5;
         message.textContent = `${this.activePlayer.opponent.name} won.`;
         actionBtn.textContent = "New Game";
         actionBtn.style.display = "block";
+        return;
       }
 
       this.activePlayer.activeAttack = true;

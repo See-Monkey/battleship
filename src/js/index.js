@@ -5,11 +5,30 @@ import Display from "./display.js";
 
 const display = new Display();
 
-document.addEventListener("click", (e) => {
+document.addEventListener("click", handleAction);
+document.addEventListener("keydown", (e) => {
+  if (e.code === "Enter" || e.code === "Space") {
+    const actionBtn = document.querySelector("#actionBtn");
+    // only trigger when the button is visible and enabled
+    if (
+      actionBtn &&
+      actionBtn.offsetParent !== null && // visible in DOM
+      !actionBtn.disabled &&
+      display.activePlayer.type === 0 // <-- only human player can trigger via keyboard
+    ) {
+      e.preventDefault();
+      handleAction({ target: actionBtn });
+    }
+  }
+});
+
+function handleAction(e) {
   let target = e.target;
+
   if (target.id === "startBtn") {
     display.start();
   }
+
   if (target.id === "actionBtn") {
     console.log(display.state);
     switch (display.state) {
@@ -32,10 +51,11 @@ document.addEventListener("click", (e) => {
         break;
     }
   }
+
   if (target.id === "orientationBtn") {
     display.activePlayer.gameboard.toggleOrientation();
     display.redrawPlaceShip();
   }
-});
+}
 
 display.init();
