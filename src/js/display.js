@@ -57,6 +57,8 @@ export default class Display {
       "input[name='p2type']:checked",
     ).value;
     const p2nameInput = document.querySelector("#p2nameInput");
+    const header = document.querySelector("header");
+    header.classList.add("mobileHidden");
 
     // validate data
     const p1name = p1nameInput.value || "Player 1";
