@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Battleship</title>
+  <script defer src="main.js"></script></head>
+  <body>
+    <dialog>
+      <form method="dialog" action="" class="pregameDialog">
+        <div class="p1nameContainer">
+          <label for="p1nameInput">Player 1 Name: </label>
+          <input type="text" id="p1nameInput" />
+        </div>
+        <fieldset class="p2type">
+          <legend>Player 2 Type:</legend>
+          <input type="radio" id="human" name="p2type" value="human" />
+          <label for="human">Human</label>
+
+          <input
+            type="radio"
+            id="computer"
+            name="p2type"
+            value="computer"
+            checked
+          />
+          <label for="computer">Computer</label>
+        </fieldset>
+        <div class="p2nameContainer">
+          <label for="p2nameInput">Player 2 Name: </label>
+          <input type="text" id="p2nameInput" />
+        </div>
+        <button id="startBtn">Start Game</button>
+      </form>
+    </dialog>
+    <header>
+      <h1 class="logo">BATTLESHIP</h1>
+    </header>
+    <div class="content"></div>
+    <footer>
+      <p class="message">Created by See-Monkey</p>
+      <button id="actionBtn">Pass Turn</button>
+    </footer>
+  </body>
+</html>
