@@ -208,7 +208,9 @@ export default class Display {
         this.transition();
       } else {
         // computer place all ships and move to player 1 attack
-        // this.state = 3;
+        this.activePlayer.opponent.placeShips();
+        this.activePlayer.activeAttack = true;
+        this.redraw();
       }
     } else if (this.activePlayer === this.player2) {
       this.state = 4;

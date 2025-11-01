@@ -1,4 +1,3 @@
-make random placement function for computer ships
 make the computer attack on its turn
 make the computer search and destroy
 refine ship placement message to include length and orietation
