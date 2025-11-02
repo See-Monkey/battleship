@@ -87,6 +87,10 @@ export default class Display {
     message.style.display = "block";
     if (this.activePlayer.gameboard.activeShip !== "done") {
       message.textContent = `${this.activePlayer.name}, place your ${this.activePlayer.gameboard.activeShip}.`;
+      message.appendChild(document.createElement("br"));
+      message.append(
+        `It is ${this.activePlayer.gameboard.ships[this.activePlayer.gameboard.activeShip].length} squares long.`,
+      );
     } else {
       message.textContent = "All ships placed.";
     }
@@ -186,19 +190,32 @@ export default class Display {
     activeName.textContent = this.activePlayer.name;
     activeBoard.appendChild(activeName);
 
+    const orientationContainer = this.createElement(
+      "div",
+      "orientationContainer",
+    );
+
     const orientationBtn = document.createElement("button");
     orientationBtn.id = "orientationBtn";
     this.activePlayer.gameboard.activeOrientation === 0
       ? orientationBtn.classList.add("horiz")
       : orientationBtn.classList.add("vert");
     if (this.activePlayer.gameboard.activeShip === "done") {
-      orientationBtn.classList.add("hidden");
+      orientationContainer.classList.add("hidden");
       actionBtn.textContent = "Done";
       actionBtn.style.display = "block";
     }
 
+    const orientationLabel = this.createElement("p", "orientationLabel");
+    this.activePlayer.gameboard.activeOrientation === 0
+      ? (orientationLabel.textContent = "Placing Horizontally")
+      : (orientationLabel.textContent = "Placing Vertically");
+
+    orientationContainer.appendChild(orientationBtn);
+    orientationContainer.appendChild(orientationLabel);
+
     content.appendChild(board);
-    content.appendChild(orientationBtn);
+    content.appendChild(orientationContainer);
   }
 
   passTurnPlaceShip() {

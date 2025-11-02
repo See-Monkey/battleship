@@ -79,43 +79,43 @@ export default class Player {
     let [originVert, originHoriz] = this.searchCoordinate
       .split(",")
       .map(Number);
+
     let vert = originVert;
     let horiz = originHoriz;
-    let coordinate = null;
 
-    // randomly choose east or south for search direction
+    // randomly choose east or south initially
     if (this.searchDirection === null) {
       const randomDirection = Math.floor(Math.random() * 2);
-      if (randomDirection === 0) this.searchDirection = [0, 1]; // east
-      if (randomDirection === 1) this.searchDirection = [1, 0]; // south
+      this.searchDirection = randomDirection === 0 ? [0, 1] : [1, 0];
     }
 
-    while (this.search === 1) {
-      do {
-        // search in the searchDirection until an unattacked square is identified
-        vert += this.searchDirection[0];
-        horiz += this.searchDirection[1];
-        coordinate = `${vert},${horiz}`;
+    let attacked = false;
 
-        // check if identified square is out of bounds
-        if (vert < 0 || vert > 9 || horiz < 0 || horiz > 9) {
+    while (!attacked) {
+      // step in the current direction
+      vert += this.searchDirection[0];
+      horiz += this.searchDirection[1];
+
+      const coordinate = `${vert},${horiz}`;
+
+      // out of bounds; change direction
+      if (vert < 0 || vert > 9 || horiz < 0 || horiz > 9) {
+        this.nextDirection();
+        vert = originVert;
+        horiz = originHoriz;
+        continue;
+      }
+
+      // already attacked; if miss, switch direction early
+      if (this.attackedCoordinates.has(coordinate)) {
+        const square = this.opponent.gameboard.board[vert][horiz];
+        if (square === "miss") {
           this.nextDirection();
           vert = originVert;
           horiz = originHoriz;
-          continue;
         }
-
-        // if previous miss identified, switch direction early
-        if (this.attackedCoordinates.has(coordinate)) {
-          const square = this.opponent.gameboard.board[vert][horiz];
-          if (square === "miss") {
-            this.nextDirection();
-            vert = originVert;
-            horiz = originHoriz;
-            continue;
-          }
-        }
-      } while (this.attackedCoordinates.has(coordinate));
+        continue;
+      }
 
       // valid square found; attack
       const hitShip = this.opponent.gameboard.board[vert][horiz];
@@ -125,26 +125,21 @@ export default class Player {
       if (result === "hit") {
         this.previousResult = "hit";
         this.previousShip = hitShip;
-        return;
       } else if (result === "sunk") {
         this.previousResult = "sunk";
         this.previousShip = hitShip;
         this.search = 0;
         this.searchDirection = null;
         this.searchCoordinate = null;
-        return;
       } else if (result === "miss") {
         this.previousResult = "miss";
         this.nextDirection();
-        return;
+        vert = originVert;
+        horiz = originHoriz;
       }
-    }
 
-    // all directions invalid or exhausted
-    this.search = 0;
-    this.searchDirection = null;
-    this.searchCoordinate = null;
-    return this.randomAttack();
+      attacked = true; // exit loop after attacking one square
+    }
   }
 
   nextDirection() {

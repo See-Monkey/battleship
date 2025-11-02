@@ -208,6 +208,15 @@ header {
   background-image: url("../img/convergence-target.svg");
 }
 
+.orientationContainer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.orientationContainer.hidden {
+  display: none;
+}
+
 #orientationBtn {
   height: 50px;
   width: 50px;
@@ -224,8 +233,10 @@ header {
 #orientationBtn.vert {
   background-image: url("../img/phone-rotate-landscape.svg");
 }
-#orientationBtn.hidden {
-  display: none;
+
+.orientationLabel {
+  width: 90px;
+  text-align: center;
 }
 
 /* ============ footer ============ */
