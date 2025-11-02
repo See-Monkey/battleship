@@ -163,7 +163,7 @@ export default class Display {
               ? "button"
               : "div",
             "square",
-            `${i},${j}`,
+            `${i}-${j}`,
           );
           row.appendChild(square);
 
@@ -175,6 +175,62 @@ export default class Display {
                 this.activePlayer.gameboard.activeOrientation,
               );
               this.redrawPlaceShip();
+            });
+
+            // add event listener to highlight ship placement on hover
+            square.addEventListener("mouseover", (e) => {
+              const shipName = this.activePlayer.gameboard.activeShip;
+              const shipLength =
+                this.activePlayer.gameboard.ships[shipName].length;
+              const orientation = this.activePlayer.gameboard.activeOrientation;
+
+              const startVert = i;
+              const startHoriz = j;
+
+              const validPlacement = this.activePlayer.gameboard.testPlaceShip(
+                shipLength,
+                [startVert, startHoriz],
+                orientation,
+              );
+
+              const squaresToHighlight = [];
+              let vert = startVert;
+              let horiz = startHoriz;
+
+              for (let k = 0; k < shipLength; k++) {
+                if (vert >= 0 && vert < 10 && horiz >= 0 && horiz < 10) {
+                  const sq = document.getElementById(`${vert}-${horiz}`);
+                  if (sq) squaresToHighlight.push(sq);
+                }
+                orientation === 0 ? horiz++ : vert++;
+              }
+
+              squaresToHighlight.forEach((sq) => {
+                sq.classList.add(
+                  validPlacement ? "placeHover" : "invalidHover",
+                );
+              });
+            });
+
+            square.addEventListener("mouseout", (e) => {
+              const shipName = this.activePlayer.gameboard.activeShip;
+              const shipLength =
+                this.activePlayer.gameboard.ships[shipName].length;
+              const orientation = this.activePlayer.gameboard.activeOrientation;
+
+              let vert = i;
+              let horiz = j;
+
+              for (let k = 0; k < shipLength; k++) {
+                if (vert >= 0 && vert < 10 && horiz >= 0 && horiz < 10) {
+                  const sq = document.getElementById(`${vert}-${horiz}`);
+                  if (sq) {
+                    sq.classList.remove("placeHover");
+                    sq.classList.remove("invalidHover");
+                  }
+                }
+                orientation === 0 ? horiz++ : vert++;
+              }
             });
           }
         } else {
@@ -361,6 +417,15 @@ export default class Display {
           if (this.activePlayer.activeAttack === true) {
             square.addEventListener("click", (e) => {
               this.attack([i, j]);
+            });
+
+            // add event listener to highlight on hover
+            square.addEventListener("mouseover", (e) => {
+              square.classList.add("attackHover");
+            });
+
+            square.addEventListener("mouseout", (e) => {
+              square.classList.remove("attackHover");
             });
           }
         }

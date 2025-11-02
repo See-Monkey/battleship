@@ -146,13 +146,13 @@ export default class Player {
     const [vert, horiz] = this.searchDirection;
 
     if (vert === 0 && horiz === 1) {
-      this.searchDirection = [0, -1]; // west
+      this.searchDirection = [0, -1]; // east to west
     } else if (vert === 0 && horiz === -1) {
-      this.searchDirection = [1, 0]; // south
+      this.searchDirection = [1, 0]; // west to south
     } else if (vert === 1 && horiz === 0) {
-      this.searchDirection = [-1, 0]; // north
+      this.searchDirection = [-1, 0]; // south to north
     } else if (vert === -1 && horiz === 0) {
-      this.searchDirection = [0, 1]; // wrap back around to east
+      this.searchDirection = [0, 1]; // wrap back around, north to east
     }
   }
 }

@@ -66,6 +66,7 @@ h6 {
   --l-blue: #7998b9;
   --gray: #eae8ff;
   --white: #f5f4ff;
+  --red: #781717;
 }
 
 body {
@@ -206,6 +207,13 @@ header {
   background-repeat: no-repeat;
   background-size: 24px 24px;
   background-image: url("../img/convergence-target.svg");
+}
+.square.placeHover {
+  background-color: var(--d-blue);
+}
+.square.invalidHover,
+.square.attackHover {
+  background-color: var(--red);
 }
 
 .orientationContainer {
