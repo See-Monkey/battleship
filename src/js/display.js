@@ -394,9 +394,22 @@ export default class Display {
       row.appendChild(label);
       for (let j = 0; j < 10; j++) {
         // if already hit
+        const oppPrevAttack =
+          this.activePlayer.opponent.gameboard.previousAttack;
+
         if (this.activePlayer.opponent.gameboard.board[i][j] === "hit") {
           const hitSquare = this.createElement("div", "square", `${i},${j}`);
           hitSquare.classList.add("hit");
+
+          if (
+            oppPrevAttack &&
+            oppPrevAttack[0] === i &&
+            oppPrevAttack[1] === j &&
+            this.activePlayer.activeAttack === false
+          ) {
+            hitSquare.classList.add("previousAttack");
+          }
+
           row.appendChild(hitSquare);
         } else if (
           // if already missed
@@ -404,6 +417,16 @@ export default class Display {
         ) {
           const missedSquare = this.createElement("div", "square", `${i},${j}`);
           missedSquare.classList.add("miss");
+
+          if (
+            oppPrevAttack &&
+            oppPrevAttack[0] === i &&
+            oppPrevAttack[1] === j &&
+            this.activePlayer.activeAttack === false
+          ) {
+            missedSquare.classList.add("previousAttack");
+          }
+
           row.appendChild(missedSquare);
         } else {
           // if not attacked yet
@@ -458,26 +481,45 @@ export default class Display {
       row.appendChild(label);
       for (let j = 0; j < 10; j++) {
         // if already hit
+        const activePrevAttack = this.activePlayer.gameboard.previousAttack;
+
         if (this.activePlayer.gameboard.board[i][j] === "hit") {
-          const hitSquare = this.createElement("div", "square", `${i},${j}`);
+          const hitSquare = this.createElement("div", "square", `${i}-${j}`);
           hitSquare.classList.add("hit");
+
+          if (
+            activePrevAttack &&
+            activePrevAttack[0] === i &&
+            activePrevAttack[1] === j &&
+            this.activePlayer.activeAttack === true
+          ) {
+            hitSquare.classList.add("previousAttack");
+          }
+
           row.appendChild(hitSquare);
-        } else if (
-          // if already missed
-          this.activePlayer.gameboard.board[i][j] === "miss"
-        ) {
-          const missedSquare = this.createElement("div", "square", `${i},${j}`);
+        } else if (this.activePlayer.gameboard.board[i][j] === "miss") {
+          const missedSquare = this.createElement("div", "square", `${i}-${j}`);
           missedSquare.classList.add("miss");
+
+          if (
+            activePrevAttack &&
+            activePrevAttack[0] === i &&
+            activePrevAttack[1] === j &&
+            this.activePlayer.activeAttack === true
+          ) {
+            missedSquare.classList.add("previousAttack");
+          }
+
           row.appendChild(missedSquare);
         } else if (
           // if not attacked yet
           this.activePlayer.gameboard.board[i][j] === null
         ) {
-          const square = this.createElement("div", "square", `${i},${j}`);
+          const square = this.createElement("div", "square", `${i}-${j}`);
           row.appendChild(square);
         } else {
           // named ship present
-          const shipSquare = this.createElement("div", "square", `${i},${j}`);
+          const shipSquare = this.createElement("div", "square", `${i}-${j}`);
           shipSquare.classList.add("ship");
           row.appendChild(shipSquare);
         }

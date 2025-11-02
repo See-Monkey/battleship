@@ -26,6 +26,7 @@ export default class Gameboard {
 
     this.activeShip = "Carrier";
     this.activeOrientation = 0;
+    this.previousAttack = null;
   }
 
   placeShip(shipName, shipOrigin, shipOrientation) {
@@ -96,12 +97,14 @@ export default class Gameboard {
       throw new Error("This spot was already attacked");
     } else if (this.board[vert][horiz] === null) {
       this.board[vert][horiz] = "miss";
+      this.previousAttack = [vert, horiz];
       return "miss";
     } else {
       const shipName = this.board[vert][horiz];
       const ship = this.ships[shipName];
       ship.hit();
       this.board[vert][horiz] = "hit";
+      this.previousAttack = [vert, horiz];
       if (ship.isSunk()) return "sunk";
       return "hit";
     }

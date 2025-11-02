@@ -67,6 +67,7 @@ h6 {
   --gray: #eae8ff;
   --white: #f5f4ff;
   --red: #781717;
+  --orange: #ff9f1c;
 }
 
 body {
@@ -214,6 +215,19 @@ header {
 .square.invalidHover,
 .square.attackHover {
   background-color: var(--red);
+}
+.square.previousAttack {
+  outline: 3px solid var(--red);
+  animation: pulse 1s infinite alternate;
+}
+
+@keyframes pulse {
+  from {
+    outline-color: var(--red);
+  }
+  to {
+    outline-color: var(--orange);
+  }
 }
 
 .orientationContainer {
