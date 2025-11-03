@@ -7,8 +7,10 @@
 import Ship from "./ship.js";
 import hitSoundFile from "../audio/cannonball.mp3";
 import missSoundFile from "../audio/water-splash.mp3";
+import sunkSoundFile from "../audio/bubbles.mp3";
 const hitSound = new Audio(hitSoundFile);
 const missSound = new Audio(missSoundFile);
+const sunkSound = new Audio(sunkSoundFile);
 
 export default class Gameboard {
   constructor() {
@@ -111,7 +113,10 @@ export default class Gameboard {
       this.board[vert][horiz] = "hit";
       this.playHitSound();
       this.previousAttack = [vert, horiz];
-      if (ship.isSunk()) return "sunk";
+      if (ship.isSunk()) {
+        this.playSunkSound();
+        return "sunk";
+      }
       return "hit";
     }
   }
@@ -128,5 +133,10 @@ export default class Gameboard {
   playMissSound() {
     missSound.currentTime = 0;
     missSound.play();
+  }
+
+  playSunkSound() {
+    sunkSound.currentTime = 0;
+    sunkSound.play();
   }
 }

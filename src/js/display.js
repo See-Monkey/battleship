@@ -1,4 +1,6 @@
 import Player from "./player.js";
+import victorySoundFile from "../audio/dramatic-horn.mp3";
+const victorySound = new Audio(victorySoundFile);
 
 export default class Display {
   constructor() {
@@ -309,6 +311,7 @@ export default class Display {
         const actionBtn = document.querySelector("#actionBtn");
 
         this.redraw();
+        this.playVictorySound();
         this.state = 5;
         message.textContent = `${this.activePlayer.opponent.name} won.`;
         actionBtn.textContent = "New Game";
@@ -564,6 +567,7 @@ export default class Display {
       actionBtn.style.display = "block";
     } else {
       // game over
+      this.playVictorySound();
       this.state = 5;
       message.textContent = "You won!";
       actionBtn.textContent = "New Game";
@@ -584,5 +588,10 @@ export default class Display {
     const actionBtn = document.querySelector("#actionBtn");
     await this.delay(2000);
     actionBtn.style.display = "block";
+  }
+
+  playVictorySound() {
+    victorySound.currentTime = 0;
+    victorySound.play();
   }
 }
