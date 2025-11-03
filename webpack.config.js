@@ -28,6 +28,10 @@ module.exports = {
         test: /\.(png|svg|jpg|jpeg|gif)$/i,
         type: "asset/resource",
       },
+      {
+        test: /\.(mp3|wav|ogg|m4a)$/i, // Match common audio file extensions
+        type: "asset/resource", // Treat as a resource that will be emitted to the output directory
+      },
     ],
   },
 };

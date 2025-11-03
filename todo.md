@@ -1,1 +1,1 @@
-add sounds for hits and misses
+add sounds for sunk and game over

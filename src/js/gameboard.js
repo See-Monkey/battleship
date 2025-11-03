@@ -5,6 +5,10 @@
 // Ship orentation = 0-horizontal, 1-vertical
 
 import Ship from "./ship.js";
+import hitSoundFile from "../audio/cannonball.mp3";
+import missSoundFile from "../audio/water-splash.mp3";
+const hitSound = new Audio(hitSoundFile);
+const missSound = new Audio(missSoundFile);
 
 export default class Gameboard {
   constructor() {
@@ -97,6 +101,7 @@ export default class Gameboard {
       throw new Error("This spot was already attacked");
     } else if (this.board[vert][horiz] === null) {
       this.board[vert][horiz] = "miss";
+      this.playMissSound();
       this.previousAttack = [vert, horiz];
       return "miss";
     } else {
@@ -104,6 +109,7 @@ export default class Gameboard {
       const ship = this.ships[shipName];
       ship.hit();
       this.board[vert][horiz] = "hit";
+      this.playHitSound();
       this.previousAttack = [vert, horiz];
       if (ship.isSunk()) return "sunk";
       return "hit";
@@ -112,5 +118,15 @@ export default class Gameboard {
 
   fleetSunk() {
     return Object.values(this.ships).every((ship) => ship.isSunk());
+  }
+
+  playHitSound() {
+    hitSound.currentTime = 0;
+    hitSound.play();
+  }
+
+  playMissSound() {
+    missSound.currentTime = 0;
+    missSound.play();
   }
 }
