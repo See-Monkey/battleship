@@ -326,6 +326,7 @@ export default class Display {
     const message = document.querySelector(".message");
     const actionBtn = document.querySelector("#actionBtn");
 
+    actionBtn.style.display = "none";
     content.innerHTML = "";
     message.style.display = "none";
     actionBtn.textContent = "Ready";
@@ -342,6 +343,7 @@ export default class Display {
       transitionMsg.textContent = `Pass the device to ${this.activePlayer.name}.`;
     }
 
+    this.delayActionBtn();
     content.appendChild(transitionMsg);
   }
 
@@ -572,5 +574,15 @@ export default class Display {
   message(string) {
     const msg = document.querySelector(".message");
     msg.textContent = string;
+  }
+
+  delay(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
+
+  async delayActionBtn() {
+    const actionBtn = document.querySelector("#actionBtn");
+    await this.delay(2000);
+    actionBtn.style.display = "block";
   }
 }
